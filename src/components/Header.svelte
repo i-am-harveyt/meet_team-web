@@ -13,7 +13,7 @@
 	});
 </script>
 
-<Navbar fluid={true}>
+<Navbar fluid={true} class="mb-5 p-0 border-b">
 	{#if auth !== null}
 		<Drawer />
 	{/if}
@@ -28,8 +28,10 @@
 	</NavBrand>
 	<DarkMode
 		class="
-		m-2 flex h-6
-		w-6 items-center justify-center p-0
+		m-2 flex
+		h-6 w-6
+		items-center justify-center p-4
+		duration-300
 		hover:bg-gray-700 hover:text-white
 	"
 	/>

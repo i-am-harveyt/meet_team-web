@@ -1,39 +1,41 @@
 <script>
-	import { Button, Input, Label } from 'flowbite-svelte';
-
+	import { Input, Label } from 'flowbite-svelte';
+	import { register } from './register.util';
+	import FormButton from '../../components/FormButton.svelte';
+	import Container from '../../components/Container.svelte';
 	// style
 	const topInputStyle = 'mt-8 flex items-center justify-between';
 	const ordInputStyle = 'mt-3 flex items-center justify-between';
 	const labelStyle = 'mr-8 text-lg';
-	const inputStyle = 'w-60';
+	const inputStyle = 'w-56';
 
 	// bind values
-	$:account = '';
+	$: account = '';
 	$: name = '';
 	$: password = '';
 	$: passwordAgain = '';
+	$: loading = false;
 
 	// check
 	let passwordsSame = true;
 	$: passwordsSame = password === passwordAgain;
+
+	function submitRegister() {
+		loading = true;
+		register(account, password, name);
+		setTimeout(() => {
+			loading = false;
+		}, 1_500);
+	}
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Register</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section>
-	<div
-		class="
-		container mt-32
-		flex flex-col
-		rounded-xl
-		bg-gray-300
-		px-10 py-10
-		dark:bg-gray-800
-		"
-	>
+<Container>
+	<div class="flex w-96 flex-col justify-around self-center">
 		<p
 			class="
 			text-center text-3xl
@@ -72,19 +74,9 @@
 		{#if !passwordsSame}
 			<p>Passwords are not same!</p>
 		{/if}
-		<Button
-			id="register-button"
-			class="
-			mt-8
-			rounded-3xl
-			duration-200
-			hover:rounded
-			"
-			disabled={!passwordsSame}
-			>Register!</Button
-		>
+		<FormButton onClickFunction={submitRegister} {loading}>Register</FormButton>
 	</div>
-</section>
+</Container>
 
 <style>
 </style>

@@ -1,54 +1,61 @@
 <script>
-	import { A, Button, Input, Label } from 'flowbite-svelte';
+	import { A, Input, Label } from 'flowbite-svelte';
+	import { login } from './login.util.js';
+	import FormButton from '../../components/FormButton.svelte';
+	import Container from '../../components/Container.svelte';
 
-	$: account = '';
+	$: accountInput = '';
+	$: passwordInput = '';
+	$: loading = false;
+
+	function submitLogin() {
+		loading = true;
+		login(accountInput, passwordInput);
+		setTimeout(() => {
+			loading = false;
+			if (window.localStorage.getItem('authorization') === null) {
+				alert('Login Failed');
+				return;
+			}
+			alert('Login Succeed');
+			window.location.replace('/');
+		}, 1_500);
+	}
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Login</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section>
-	<div
-		class="
-		container mt-32
-		flex flex-col
-		rounded-xl
-		bg-gray-300
-		px-10
-		py-10 dark:bg-gray-800
-		"
-	>
+<Container>
+	<div class="w mx-auto flex w-96 flex-col">
 		<p
 			class="
-			text-center text-3xl
+			break-all text-center
+			text-3xl
 			dark:text-orange-100"
 		>
-			Welcome {account === '' ? 'to Meet Team' : account}!
+			Welcome {accountInput === '' ? 'to Meet Team' : accountInput}!
 		</p>
 		<div class="mt-8 flex items-center justify-between">
-			<Label for="account" class="mr-8 text-lg">Account</Label>
-			<Input bind:value={account} id="account" placeholder="Account" class="w-60" />
+			<Label for="account" class="text-lg">Account</Label>
+			<Input bind:value={accountInput} id="account" placeholder="Account" class="max-w-56" />
 		</div>
 		<div class="mt-3 flex items-center justify-between">
-			<Label for="password" class="mr-8 text-lg">Password</Label>
-			<Input id="password" placeholder="Password" class="w-60" />
+			<Label for="password" class="text-lg">Password</Label>
+			<Input
+				bind:value={passwordInput}
+				id="password"
+				type="password"
+				placeholder="Password"
+				class="max-w-56"
+			/>
 		</div>
-		<Button
-			id="register-button"
-			class="
-			mt-8
-			rounded-3xl
-			transition-all
-			duration-200
-			hover:rounded
-			hover:bg-green-500
-			">Register!</Button
-		>
+		<FormButton onClickFunction={submitLogin} {loading}>Login</FormButton>
 		<p class="mt-3">or, <A href="/register">register now!</A></p>
 	</div>
-</section>
+</Container>
 
 <style>
 </style>
