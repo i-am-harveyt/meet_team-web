@@ -6,20 +6,18 @@
 export function register(account, password, name) {
 	let submit = async () => {
 		// fetching logic
-		// const res = await fetch('http://localhost:8000/user/register', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		Accept: '*',
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	body: JSON.stringify({
-		// 		account: account,
-		// 		password: password,
-		// 		name: name
-		// 	})
-		// });
-
-		let res = { ok: 1 };
+		const res = await fetch('http://localhost:8000/user/register', {
+			method: 'POST',
+			headers: {
+				Accept: '*',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				account: account,
+				password: password,
+				name: name
+			})
+		});
 
 		alert(res.ok ? 'Register Succeed!' : 'Register Failed');
 	};

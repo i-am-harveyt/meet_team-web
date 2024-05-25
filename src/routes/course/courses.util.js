@@ -1,6 +1,6 @@
-export async function fetchCourses() {
+export async function fetchCourses(searchTerm = '') {
 	const token = window.localStorage.getItem('authorization');
-	const res = await fetch('http://localhost:8000/user/courses', {
+	const res = await fetch(`http://localhost:8000/course?searchTerm=${searchTerm}`, {
 		method: 'GET',
 		headers: {
 			Accept: '*',
@@ -10,5 +10,5 @@ export async function fetchCourses() {
 	});
 
 	const data = await res.json();
-	return data['data']['course'];
+	return data['data'];
 }

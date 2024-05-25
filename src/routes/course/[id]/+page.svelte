@@ -1,31 +1,17 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { fetchCourse } from './course.util.js';
-	import { A, Avatar, Card, Hr, ImagePlaceholder } from 'flowbite-svelte';
+	import { fetchCourse, joinCourse } from './course.util.js';
+	import { A, Avatar, Button, Card, Hr, ImagePlaceholder } from 'flowbite-svelte';
 	import Container from '../../../components/Container.svelte';
 
 	const id = $page.params.id;
 	/**
-	 * @type {{
-		 id: number;
-		 name: string;
-		 year: number;
-		 semester: string;
-		 description: string;
-		 teacher_id: number;
-		 teacher: string;
-		 } | null}
+	 * @type {{ id: number; name: string; year: number; semester: string; description: string; teacher_id: number; teacher: string; in_course: boolean | number; } | null}
 	 */
 	let courseInfo = null;
 	/**
-	 * @type {{
-		 id: number;
-		 name: string;
-		 description: string;
-		 owner: string;
-		 href: string | null;
-		 }[] | null}
+	 * @type {{ id: number; name: string; description: string; owner: string; href: string | null; }[] | null}
 	 */
 	let groupsInfo = null;
 
@@ -43,7 +29,7 @@
 	});
 </script>
 
-<section class="w-4/5">
+<section class="flex w-3/5 max-lg:w-4/5">
 	<Container>
 		{#if courseInfo === null}
 			<ImagePlaceholder />
@@ -64,6 +50,14 @@
 					</div>
 				</div>
 			</div>
+			{#if !courseInfo.in_course}
+				<Button
+					class="mx-auto"
+					on:click={() => {
+						joinCourse(id);
+					}}>Join The Course</Button
+				>
+			{/if}
 		{/if}
 		<p class="p-5 text-xl">Groups</p>
 		<div class="flex flex-wrap justify-center">

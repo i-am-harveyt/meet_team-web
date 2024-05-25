@@ -1,7 +1,6 @@
 <script>
 	import {
 		Avatar,
-		Heading,
 		Table,
 		TableBody,
 		TableBodyRow,
@@ -14,14 +13,26 @@
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { fetchProfile } from './profile.util.js';
+	import Review from '../../components/Review.svelte';
+	import UpdateModal from './UpdateModal.svelte';
+	import { marked } from 'marked';
 
 	// fields
 	let name = '';
 	let desc = '';
-	const columns = ['name', 'teacher', 'year', 'semester'];
+	const courseCols = ['name', 'teacher', 'year', 'semester'];
 	let courses = [
 		{ id: 1, name: '資料庫管理', teacher: '周致遠', year: 112, semester: 2, href: '' },
 		{ id: 2, name: '系統分析與設計', teacher: '杜雨儒', year: 112, semester: 1, href: '' }
+	];
+	let comments = [
+		{
+			id: '1',
+			course: '資料庫管理',
+			content: '神組員推推！',
+			total: 5,
+			rating: 4.5
+		}
 	];
 
 	// onMount
@@ -38,34 +49,46 @@
 	});
 </script>
 
-<section
+<main
 	class="
 	mt-5 flex
-	w-4/5 flex-col
+	w-3/5 flex-col
 	rounded-2xl
 	bg-gray-100
 	p-5
 	dark:bg-gray-800
+	max-lg:w-4/5
 "
 >
-	<div id="description-info" class="ml-5 mt-5">
-		{#if desc === '' || name === ''}
+	<section id="description-info" class="mx-5 mt-5">
+		{#if !desc && !name}
 			<ImagePlaceholder />
 		{:else}
-			<div id="account-info" class="flex items-center">
-				<Avatar size="lg" />
-				<p class="ml-5 text-2xl">{name}</p>
+			<div id="account-info" class="flex items-center justify-between">
+				<div class="flex items-center">
+					<Avatar size="lg" />
+					<p class="mx-5 text-2xl">{name}</p>
+				</div>
+				<UpdateModal value={desc} />
 			</div>
-			<Heading tag="h4" class="mt-3">Description</Heading>
-			<p class="break-all">{desc === null ? 'None' : desc}</p>
+			<p class="mb-3 mt-3 border-b text-xl font-semibold">Description</p>
+			<div
+				class="
+				prose
+				break-all
+				dark:prose-invert
+				"
+			>
+				{@html desc ? marked(desc ? desc : '') : 'None'}
+			</div>
 		{/if}
-	</div>
+	</section>
 	<Hr />
-	<div id="courses info" class="ml-5">
-		<Heading tag="h4">Courses</Heading>
+	<p class="mx-5 mb-3 border-b text-xl font-semibold">Courses</p>
+	<div id="courses info" class="mx-5">
 		<Table class="mt-5">
 			<TableHead>
-				{#each columns as col}
+				{#each courseCols as col}
 					<TableHeadCell>{col}</TableHeadCell>
 				{/each}
 			</TableHead>
@@ -81,4 +104,11 @@
 			</TableBody>
 		</Table>
 	</div>
-</section>
+	<Hr />
+	<p class="mx-5 mb-3 border-b text-xl font-semibold">Reviews</p>
+	<div id="review info" class="mx-5 flex flex-wrap justify-center gap-2">
+		{#each comments as comment}
+			<Review {comment} />
+		{/each}
+	</div>
+</main>

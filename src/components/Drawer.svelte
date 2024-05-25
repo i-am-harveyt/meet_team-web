@@ -50,7 +50,7 @@
 		</div>
 		<div id="links" class="flex flex-col space-y-3">
 			<A href="/course">Courses</A>
-			<A href="/task">Tasks</A>
+			<A href="/tasks">Tasks</A>
 		</div>
 	</Drawer>
 </div>

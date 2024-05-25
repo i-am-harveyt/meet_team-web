@@ -22,10 +22,10 @@
 
 	function submitRegister() {
 		loading = true;
-		register(account, password, name);
 		setTimeout(() => {
+			register(account, password, name);
 			loading = false;
-		}, 1_500);
+		}, 500);
 	}
 </script>
 

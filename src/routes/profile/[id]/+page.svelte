@@ -14,6 +14,7 @@
 	import { onMount } from 'svelte';
 	import { fetchProfile } from './../profile.util.js';
 	import { page } from '$app/stores';
+	import { marked } from 'marked';
 
 	// fields
 	let name = '';
@@ -57,7 +58,9 @@
 				<p class="ml-5 text-2xl">{name}</p>
 			</div>
 			<Heading tag="h4" class="mt-3">Description</Heading>
-			<p class="break-all">{desc === null ? 'None' : desc}</p>
+			<div class="prose break-all dark:prose-invert">
+				{@html desc === null ? 'None' : marked(desc)}
+			</div>
 		{/if}
 	</div>
 	<Hr />
