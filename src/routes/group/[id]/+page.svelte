@@ -111,7 +111,7 @@
 				</div>
 			{/if}
 		</div>
-		<A href={$page.url + '/tasks'} class="text-xl">Go to Task Dashboard</A>
-		<A href={$page.url + '/review'} class="text-xl">Review your Members</A>
+		<A href={`${$page.url}/tasks`} class="text-xl">Go to Task Dashboard</A>
+		<A href={`${$page.url}/review`} class="text-xl">Review your Members</A>
 	</Container>
 </main>

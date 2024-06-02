@@ -36,3 +36,29 @@ export function submitUpdate(description = '') {
 		window.location.reload();
 	})();
 }
+
+export async function fetchReview(userId = -1) {
+	const token = window.localStorage.getItem('authorization');
+	const headers = {
+		Accept: '*',
+		'Content-Type': 'application/json',
+		authorization: `${token}`
+	};
+
+	/**
+	 * @type {never[]}
+	 */
+	let ret = [];
+	const url =
+		userId === -1
+			? 'http://localhost:8000/review/user/'
+			: `http://localhost:8000/review/user/?user_id=${userId}`;
+	console.log(url);
+	const res = await fetch(url, {
+		method: 'GET',
+		headers
+	});
+	console.log(res.ok)
+	ret = (await res.json())['data']['reviews'];
+	return ret;
+}

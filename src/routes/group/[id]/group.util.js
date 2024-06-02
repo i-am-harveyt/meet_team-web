@@ -1,5 +1,5 @@
 export async function fetchGroupInfo(groupID = '') {
-	const res = await fetch(`http://localhost:8000/group?group=${groupID}`, {
+	const res = await fetch(`http://localhost:8000/group/?group=${groupID}`, {
 		method: 'GET',
 		headers: {
 			Accept: '*',

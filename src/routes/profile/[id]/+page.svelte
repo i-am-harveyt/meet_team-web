@@ -12,11 +12,13 @@
 		ImagePlaceholder
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { fetchProfile } from './../profile.util.js';
+	import { fetchProfile, fetchReview } from './../profile.util.js';
 	import { page } from '$app/stores';
 	import { marked } from 'marked';
+	import Review from '../../../components/Review.svelte';
 
 	// fields
+	let reviews = [];
 	let name = '';
 	let desc = '';
 	const columns = ['name', 'teacher', 'year', 'semester'];
@@ -35,6 +37,7 @@
 				name = profileInfo.data.name;
 				desc = profileInfo.data.description;
 			}, 600);
+			reviews = await fetchReview(parseInt(userID));
 		})();
 	});
 </script>
@@ -57,7 +60,7 @@
 				<Avatar size="lg" />
 				<p class="ml-5 text-2xl">{name}</p>
 			</div>
-			<Heading tag="h4" class="mt-3">Description</Heading>
+			<p class="mb-3 border-b text-xl font-semibold">Description</p>
 			<div class="prose break-all dark:prose-invert">
 				{@html desc === null ? 'None' : marked(desc)}
 			</div>
@@ -65,7 +68,7 @@
 	</div>
 	<Hr />
 	<div id="courses info" class="ml-5">
-		<Heading tag="h4">Courses</Heading>
+		<p class="mb-3 border-b text-xl font-semibold">Courses</p>
 		<Table class="mt-5">
 			<TableHead>
 				{#each columns as col}
@@ -83,5 +86,11 @@
 				{/each}
 			</TableBody>
 		</Table>
+	</div>
+	<p class="mx-5 mb-3 border-b text-xl font-semibold">Reviews</p>
+	<div id="review info" class="mx-5 flex flex-wrap justify-center gap-2">
+		{#each reviews as comment}
+			<Review {comment} />
+		{/each}
 	</div>
 </section>

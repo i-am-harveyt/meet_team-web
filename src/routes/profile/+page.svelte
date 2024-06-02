@@ -12,7 +12,7 @@
 		A
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { fetchProfile } from './profile.util.js';
+	import { fetchProfile, fetchReview } from './profile.util.js';
 	import Review from '../../components/Review.svelte';
 	import UpdateModal from './UpdateModal.svelte';
 	import { marked } from 'marked';
@@ -25,15 +25,7 @@
 		{ id: 1, name: '資料庫管理', teacher: '周致遠', year: 112, semester: 2, href: '' },
 		{ id: 2, name: '系統分析與設計', teacher: '杜雨儒', year: 112, semester: 1, href: '' }
 	];
-	let comments = [
-		{
-			id: '1',
-			course: '資料庫管理',
-			content: '神組員推推！',
-			total: 5,
-			rating: 4.5
-		}
-	];
+	let reviews = [];
 
 	// onMount
 	onMount(() => {
@@ -45,6 +37,8 @@
 				desc = profileInfo.data.description;
 				courses.forEach((c, i) => (courses[i].href = `/course/${c.id}`));
 			}, 600);
+
+			reviews = await fetchReview();
 		})();
 	});
 </script>
@@ -107,7 +101,7 @@
 	<Hr />
 	<p class="mx-5 mb-3 border-b text-xl font-semibold">Reviews</p>
 	<div id="review info" class="mx-5 flex flex-wrap justify-center gap-2">
-		{#each comments as comment}
+		{#each reviews as comment}
 			<Review {comment} />
 		{/each}
 	</div>

@@ -4,6 +4,8 @@
 	import { fetchCourse, joinCourse } from './course.util.js';
 	import { A, Avatar, Button, Card, Hr, ImagePlaceholder } from 'flowbite-svelte';
 	import Container from '../../../components/Container.svelte';
+	import FormButton from '../../../components/FormButton.svelte';
+	import CreateModal from './CreateModal.svelte';
 
 	const id = $page.params.id;
 	/**
@@ -29,20 +31,30 @@
 	});
 </script>
 
-<section class="flex w-3/5 max-lg:w-4/5">
+<main
+	class="
+	mt-5 flex
+	w-3/5 flex-col
+	rounded-2xl
+	bg-gray-100
+	p-5
+	dark:bg-gray-800
+	max-lg:w-4/5
+"
+>
 	<Container>
 		{#if courseInfo === null}
 			<ImagePlaceholder />
 		{:else}
-			<div id="course-info" class="flex justify-center p-5">
+			<div id="course-info" class="flex justify-center">
 				<Avatar size="xl" class="max-md:w-0 md:mr-3" />
-				<div class="max-md:mx-auto">
+				<div class="w-4/5 max-md:mx-auto">
 					<p class="text-2xl">
 						{courseInfo.year}-{courseInfo.semester}
 						{courseInfo.name}
 					</p>
 					<div class="mt-3">
-						<p>Teacher: {courseInfo.teacher}</p>
+						<p class="text-lg">Teacher: {courseInfo.teacher}</p>
 						<Hr />
 						<p class="max-w-xl break-all">
 							{courseInfo.description}
@@ -59,7 +71,7 @@
 				>
 			{/if}
 		{/if}
-		<p class="p-5 text-xl">Groups</p>
+		<p class="mb-3 mt-3 border-b text-xl font-semibold">Groups</p>
 		<div class="flex flex-wrap justify-center">
 			{#if groupsInfo !== null}
 				{#each groupsInfo as group}
@@ -73,5 +85,6 @@
 				{/each}
 			{/if}
 		</div>
+		<CreateModal />
 	</Container>
-</section>
+</main>

@@ -4,9 +4,6 @@
 	import { onMount } from 'svelte';
 	import { fetchTask, submitCommit, submitDone } from './task.util.js';
 	import {
-		A,
-		Avatar,
-		Badge,
 		Button,
 		Hr,
 		Input,
@@ -18,6 +15,9 @@
 		Toggle
 	} from 'flowbite-svelte';
 	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
+	import MessageCard from '../../../components/MessageCard.svelte';
+	import DescriptionArea from './DescriptionArea.svelte';
+	import CommitBlock from './CommitBlock.svelte';
 
 	const taskId = $page.params.id;
 
@@ -51,88 +51,28 @@
 	<Container>
 		<div class="flex flex-col">
 			{#if taskInfo}
-				<p class="text-center text-2xl font-bold">{taskInfo.name}</p>
-				<Hr />
-				<div class="flex-wrap lg:flex">
-					<div class="lg:w-1/2">
-						<p class="text-lg font-bold">Description</p>
-						<p class="text-wrap">
-							{taskInfo.description}
-						</p>
-					</div>
-					<div class="max-lg:mt-3 lg:mx-3">
-						<p>
-							Status: <Badge
-								color={taskInfo.status === 'Todo'
-									? 'orange'
-									: taskInfo.status === 'Doing'
-										? 'red'
-										: 'green'}>{taskInfo.status}</Badge
-							>
-						</p>
-						<p>
-							Assignee: <A href={`/profile/${taskInfo.assignee.id}`}>{taskInfo.assignee.name}</A>
-						</p>
-						<p>
-							Reviewer: <A href={`/profile/${taskInfo.reviewer.id}`}>{taskInfo.reviewer.name}</A>
-						</p>
-						<p>Created at: {taskInfo.create_at}</p>
-					</div>
-				</div>
+				<DescriptionArea
+					name={taskInfo.name}
+					description={taskInfo.description}
+					status={taskInfo.status}
+					assignee={taskInfo.assignee}
+					reviewer={taskInfo.reviewer}
+					create_at={taskInfo.create_at}
+				/>
 			{/if}
 			<Hr />
 			{#if commits}
 				<p class="mb-3 text-lg font-bold">Commit History</p>
 				<Timeline class="mx-auto w-11/12 border-l-gray-600 text-gray-400">
 					{#each commits as commit}
-						<TimelineItem
-							title={commit.title}
-							date={commit.create_at}
-							classTime="text-gray-600 dark:text-gray-400"
-							classDiv="dark:text-gray-50 bg-gray-600 dark:bg-gray-400"
-						>
-							<p>
-								Commit by:
-								<A href={`/profile/${commit.creator_id}`}>
-									{commit.username}
-								</A>
-							</p>
-							<p class="text-wrap text-gray-800 dark:text-gray-300">
-								{commit.description}
-							</p>
-							{#if commit.reference_link !== null}
-								<A href={commit.reference_link}>{commit.reference_link}</A>
-							{/if}
-						</TimelineItem>
+						<CommitBlock {...commit} />
 					{/each}
 					<TimelineItem
 						date={'2024-05-18 17:58'}
 						classTime="text-gray-600 dark:text-gray-300"
 						classDiv="dark:text-gray-300 bg-gray-600 dark:bg-gray-400"
 					>
-						<div
-							class="
-							flex flex-col space-y-3
-							rounded-xl border border-gray-500
-							bg-gray-700 p-3
-							dark:text-gray-300"
-						>
-							<div class="flex items-center space-x-3">
-								<Avatar />
-								<p class="text-lg font-semibold">Harvey Tung</p>
-							</div>
-							<p class="self-center">
-								Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore
-								culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim
-								cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip
-								amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
-								officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia
-								dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id
-								nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit
-								commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
-								ullamco ut ea consectetur et est culpa et culpa duis.
-							</p>
-						</div>
+						<MessageCard name={'John Doe'}>Hi, How are you?</MessageCard>
 					</TimelineItem>
 				</Timeline>
 			{/if}
