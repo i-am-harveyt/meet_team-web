@@ -78,7 +78,7 @@
 					<Card size="xs" class="mx-1 my-1">
 						<A href={group.href ? group.href : '#'}>{group.name}</A>
 						<p>Leader: {group.owner}</p>
-						<p class="overflow-hidden overflow-ellipsis">
+						<p class="max-h-12 overflow-hidden overflow-ellipsis">
 							{group.description ? group.description : ''}
 						</p>
 					</Card>

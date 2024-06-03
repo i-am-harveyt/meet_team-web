@@ -4,6 +4,7 @@
 	import { marked } from 'marked';
 	import { page } from '$app/stores';
 	import { createGroup } from './group.util';
+	import DOMPurify from 'dompurify'
 
 	let modalOpen = false;
 	let groupName = '';
@@ -35,13 +36,13 @@
 				</div>
 				<div
 					class="
-					prose dark:prose-invert prose-headings:m-0
+					prose dark:prose-invert prose-headings:my-1
 					break-all rounded-xl
 					border border-gray-600 p-2
 					md:w-1/2
 					"
 				>
-					{@html marked.parse(groupDesc ? groupDesc : '')}
+					{@html DOMPurify.sanitize(marked.parse(groupDesc ? groupDesc : ''))}
 				</div>
 			</div>
 			<FormButton onClickFunction={submitCreate}>Submit!</FormButton>

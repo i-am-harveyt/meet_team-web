@@ -12,20 +12,18 @@
 		ImagePlaceholder
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { fetchProfile, fetchReview } from './../profile.util.js';
+	import { fetchCourses, fetchProfile, fetchReview } from './../profile.util.js';
 	import { page } from '$app/stores';
 	import { marked } from 'marked';
-	import Review from '../../../components/Review.svelte';
+	import Review from '../Review.svelte';
+	import DOMPurify from 'dompurify';
 
 	// fields
 	let reviews = [];
 	let name = '';
 	let desc = '';
 	const columns = ['name', 'teacher', 'year', 'semester'];
-	let items = [
-		{ id: 1, name: '資料庫管理', teacher: '周致遠', year: 112, semester: 2 },
-		{ id: 2, name: '系統分析與設計', teacher: '杜雨儒', year: 112, semester: 1 }
-	];
+	let courses = [];
 	const userID = $page.params.id;
 
 	// onMount
@@ -38,6 +36,7 @@
 				desc = profileInfo.data.description;
 			}, 600);
 			reviews = await fetchReview(parseInt(userID));
+			courses = await fetchCourses(parseInt(userID));
 		})();
 	});
 </script>
@@ -61,8 +60,8 @@
 				<p class="ml-5 text-2xl">{name}</p>
 			</div>
 			<p class="mb-3 border-b text-xl font-semibold">Description</p>
-			<div class="prose break-all dark:prose-invert">
-				{@html desc === null ? 'None' : marked(desc)}
+			<div class="prose dark:prose-invert prose-headings:my-1 break-all">
+				{@html DOMPurify.sanitize(desc === null ? 'None' : marked(desc))}
 			</div>
 		{/if}
 	</div>
@@ -76,7 +75,7 @@
 				{/each}
 			</TableHead>
 			<TableBody>
-				{#each items as item}
+				{#each courses as item}
 					<TableBodyRow>
 						<TableBodyCell>{item.name}</TableBodyCell>
 						<TableBodyCell>{item.teacher}</TableBodyCell>

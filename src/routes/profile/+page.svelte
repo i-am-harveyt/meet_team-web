@@ -12,8 +12,8 @@
 		A
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { fetchProfile, fetchReview } from './profile.util.js';
-	import Review from '../../components/Review.svelte';
+	import { fetchCourses, fetchProfile, fetchReview } from './profile.util.js';
+	import Review from './Review.svelte';
 	import UpdateModal from './UpdateModal.svelte';
 	import { marked } from 'marked';
 
@@ -21,10 +21,7 @@
 	let name = '';
 	let desc = '';
 	const courseCols = ['name', 'teacher', 'year', 'semester'];
-	let courses = [
-		{ id: 1, name: '資料庫管理', teacher: '周致遠', year: 112, semester: 2, href: '' },
-		{ id: 2, name: '系統分析與設計', teacher: '杜雨儒', year: 112, semester: 1, href: '' }
-	];
+	let courses = [];
 	let reviews = [];
 
 	// onMount
@@ -39,6 +36,7 @@
 			}, 600);
 
 			reviews = await fetchReview();
+			courses = await fetchCourses();
 		})();
 	});
 </script>
@@ -50,8 +48,8 @@
 	rounded-2xl
 	bg-gray-100
 	p-5
-	dark:bg-gray-800
 	max-lg:w-4/5
+	dark:bg-gray-800
 "
 >
 	<section id="description-info" class="mx-5 mt-5">
@@ -69,8 +67,9 @@
 			<div
 				class="
 				prose
-				break-all
+				prose-headings:my-1
 				dark:prose-invert
+				break-all
 				"
 			>
 				{@html desc ? marked(desc ? desc : '') : 'None'}

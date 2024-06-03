@@ -8,6 +8,10 @@ export async function fetchGroupMembersAndReviews(groupId) {
 			authorization: `${token}`
 		}
 	});
+	if (!res.ok) {
+		alert("Fetch Failed!");
+		return;
+	}
 	const data = await res.json();
 	return data;
 }

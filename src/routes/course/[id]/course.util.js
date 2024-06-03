@@ -26,7 +26,11 @@ export async function joinCourse(id) {
 			authorization: `${token}`
 		}
 	});
+	if (res.ok) window.location.reload();
+	else {
+		alert('Join Failed!');
+		return;
+	}
 	const ret = await res.json();
-	console.log(ret);
 	return ret;
 }

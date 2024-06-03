@@ -3,6 +3,7 @@
 	import FormButton from '../../components/FormButton.svelte';
 	import { marked } from 'marked';
 	import { submitUpdate } from './profile.util.js';
+	import DOMPurify from "dompurify"
 
 	let modalOpen = false;
 	export let value = '';
@@ -19,13 +20,13 @@
 				</div>
 				<div
 					class="
-					prose prose-headings:m-0 dark:prose-invert
+					prose prose-headings:my-1 dark:prose-invert
 					break-all rounded-xl
 					border border-gray-600 p-2
 					md:w-1/2
 					"
 				>
-					{@html marked.parse(value ? value : '')}
+					{@html DOMPurify.sanitize(marked.parse(value ? value : ''))}
 				</div>
 			</div>
 			<FormButton

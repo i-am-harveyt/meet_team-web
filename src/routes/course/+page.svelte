@@ -50,7 +50,7 @@
 			/>
 			<Button size="sm" type="submit">Search</Button>
 		</div>
-		<div class="mt-5 flex justify-center space-y-3">
+		<div class="mt-5 flex flex-col items-center justify-center space-y-3">
 			{#if courses !== null && courses !== undefined}
 				{#each courses as course}
 					<Card padding="md" size="lg" horizontal class="items-center justify-between p-0">
