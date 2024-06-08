@@ -8,7 +8,10 @@
 	class="
 	flex flex-col space-y-3
 	rounded-xl
-	border-gray-500 bg-gray-700
+	border-gray-500
+	text-gray-500
+	bg-gray-100
+	dark:bg-gray-700
 	p-3
 	dark:text-gray-300
 	"

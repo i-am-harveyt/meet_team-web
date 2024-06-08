@@ -98,7 +98,7 @@
 			{#if members === null}
 				<Skeleton />
 			{:else}
-				<div class="flex max-h-96 flex-wrap justify-center overflow-y-scroll">
+				<div class="flex max-h-96 flex-wrap justify-center overflow-y-auto">
 					{#each members as member}
 						<Card size="xs" class="mx-1 my-1">
 							<span class="flex items-center justify-between">

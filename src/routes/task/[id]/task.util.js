@@ -36,9 +36,12 @@ export async function submitCommit(
 		authorization: `${window.localStorage.getItem('authorization')}`
 	};
 
-	const url = isMessage ? '' : 'http://localhost:8000/commit';
+	const url = isMessage ? 'http://localhost:8000/message' : 'http://localhost:8000/commit';
 	const body = isMessage
-		? {}
+		? {
+				task_id: taskId,
+				description
+			}
 		: {
 				task_id: taskId,
 				reference_link: refLink,
@@ -51,10 +54,8 @@ export async function submitCommit(
 		headers,
 		body: JSON.stringify(body)
 	});
-	if (res.ok) {
-		alert('Commit Succeed!');
-		window.location.reload();
-	} else alert('Commit Failed!');
+	if (res.ok) window.location.reload();
+	else alert('Submit Failed!');
 }
 
 export async function submitDone(taskId = 0) {
@@ -66,10 +67,26 @@ export async function submitDone(taskId = 0) {
 	const url = `http://localhost:8000/task/${taskId}`;
 	const res = await fetch(url, {
 		method: 'PATCH',
-		headers,
+		headers
 	});
 	if (res.ok) {
 		alert('Task is Done');
 		window.location.reload();
 	} else alert("There's an error to update the status, please contact the provider.");
+}
+
+export async function fetchMessages(taskId = 0) {
+	const headers = {
+		Accept: '*',
+		'Content-Type': 'application/json',
+		authorization: `${window.localStorage.getItem('authorization')}`
+	};
+	const url = `http://localhost:8000/message/${taskId}`;
+	const res = await fetch(url, {
+		method: 'GET',
+		headers
+	});
+	if (res.ok) return await res.json();
+	alert('Fetch Failed!');
+	return [];
 }

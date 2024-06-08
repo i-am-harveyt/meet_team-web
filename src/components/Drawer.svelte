@@ -1,5 +1,5 @@
 <script>
-	import { A, Button, CloseButton, Drawer } from 'flowbite-svelte';
+	import { A, Button, CloseButton, Drawer, Hr } from 'flowbite-svelte';
 	import { BarsOutline } from 'flowbite-svelte-icons';
 	import { sineIn } from 'svelte/easing';
 
@@ -51,6 +51,8 @@
 		<div id="links" class="flex flex-col space-y-3">
 			<A href="/course">Courses</A>
 			<A href="/tasks">Tasks</A>
+			<Hr />
+			<A>More functions are in progress...</A>
 		</div>
 	</Drawer>
 </div>

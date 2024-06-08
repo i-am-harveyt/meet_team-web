@@ -11,7 +11,7 @@
 	/**
 	 * @type {any[]}
 	 */
-	let tasksList = [];
+	let tasks = [];
 	let viewMode = false;
 
 	onMount(() => {
@@ -26,8 +26,7 @@
 			});
 			if (!res.ok) alert('Fetch Tasks Failed!');
 			const data = await res.json();
-			const tasks = data['data']['tasks'];
-			setTimeout(() => (tasksList = tasks), 300);
+			tasks = data['data']['tasks'];
 		})();
 	});
 </script>
@@ -46,7 +45,7 @@
 	{#if viewMode}
 		<section id="gantt-view">
 			<p class="text-xl">Gantt View</p>
-			<GanttChart />
+			<GanttChart {tasks} />
 		</section>
 	{:else}
 		<p class="text-xl">Kanban View</p>
@@ -55,7 +54,7 @@
 			class="flex h-[85dvh] scroll-m-0 space-x-12 overflow-x-auto max-xl:justify-start"
 		>
 			{#each statusList as status}
-				<Track {status} tasks={tasksList.filter((v) => v.status == status)} />
+				<Track {status} tasks={tasks.filter((v) => v.status == status)} />
 			{/each}
 		</section>
 	{/if}

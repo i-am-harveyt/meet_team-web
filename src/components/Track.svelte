@@ -32,6 +32,7 @@
 >
 	<p
 		class="
+		w-full
 		border-b
 		border-gray-400
 		py-3
@@ -45,9 +46,9 @@
 	>
 		{status}
 	</p>
-	<div class="flex flex-col items-center">
-		{#each tasks as task}
-			<Task {...task} />
-		{/each}
-	</div>
+	<div class="h-full flex flex-col items-center overflow-y-auto py-3">
+	{#each tasks as task}
+		<Task {...task} />
+	{/each}
+</div>
 </div>
