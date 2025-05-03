@@ -11,7 +11,7 @@ export function submitNewTask({
 	newTaskDesc,
 	newTaskAssignee,
 	newTaskReviewer,
-	groupId = ''
+	groupId
 }) {
 	(async () => {
 		const res = await fetch(`http://localhost:8000/task/${groupId}`, {
@@ -46,4 +46,17 @@ export function fetchTasks(groupId = '') {
 		if (!res.ok) alert('Fetch Tasks Failed!');
 		return await res.json();
 	})();
+}
+
+export async function fetchMembers(groupId=0, memberNamePattern='') {
+	const token = window.localStorage.getItem('authorization');
+	const res = await fetch(`http://localhost:8000/group/${groupId}/members?name=${memberNamePattern}`, {
+		method: 'GET',
+		headers: {
+			Accept: '*',
+			'Content-Type': 'application/json',
+			authorization: `${token}`
+		}
+	});
+	return await res.json();
 }

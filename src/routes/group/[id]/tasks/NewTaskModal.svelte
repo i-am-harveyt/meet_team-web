@@ -1,29 +1,42 @@
 <script>
-	import { Button, Input, Label, Modal, Textarea } from 'flowbite-svelte';
-	import { submitNewTask } from './tasks.util.js';
+	import { Button, Dropdown, DropdownItem, Input, Label, Modal, Textarea } from 'flowbite-svelte';
+	import { submitNewTask, fetchMembers } from './tasks.util.js';
 	import FormButton from '../../../../components/FormButton.svelte';
 	import { page } from '$app/stores';
 
 	let openModal = false;
 	$: newTaskName = '';
 	$: newTaskDesc = '';
-	$: newTaskAssignee = '';
-	$: newTaskReviewer = '';
+	let assigneeId = 0;
+	$: newAssignee = '';
+	let reviewerId = 0;
+	$: newReviewer = '';
 	let loading = false;
 	const groupId = $page.params.id ? $page.params.id : '';
+	let assigneeSuggestion = [];
+	let reviewerSuggestion = [];
 
 	function submit() {
 		loading = true;
-		setTimeout(() => {
-			submitNewTask({
-				newTaskName,
-				newTaskDesc,
-				newTaskAssignee: parseInt(newTaskAssignee),
-				newTaskReviewer: parseInt(newTaskReviewer),
-				groupId
-			});
-			loading = false;
-		}, 1_500);
+		submitNewTask({
+			newTaskName,
+			newTaskDesc,
+			newTaskAssignee: parseInt(assigneeId),
+			newTaskReviewer: parseInt(reviewerId),
+			groupId
+		});
+		loading = false;
+	}
+
+	function fetchAssigneeSuggestion() {
+		fetchMembers(parseInt(groupId), newAssignee).then((res) => {
+			assigneeSuggestion = res.data.members;
+		});
+	}
+	function fetchReviewerSuggestion() {
+		fetchMembers(parseInt(groupId), newReviewer).then((res) => {
+			reviewerSuggestion = res.data.members;
+		});
 	}
 </script>
 
@@ -48,20 +61,43 @@
 			<div class="flex items-center justify-between">
 				<Label for="new-task-assignee" class="text-lg">Assignee:</Label>
 				<Input
-					bind:value={newTaskAssignee}
+					bind:value={newAssignee}
+					on:keyup={fetchAssigneeSuggestion}
 					id="new-task-assignee"
 					class="w-2/3"
 					placeholder="Task Assignee"
 				/>
+				<Dropdown open={newAssignee !== ''}>
+					{#each assigneeSuggestion as m}
+						<DropdownItem
+							on:click={() => {
+								assigneeId = m.id;
+								newAssignee = m.name;
+							}}>{m.name}</DropdownItem
+						>
+					{/each}
+				</Dropdown>
 			</div>
 			<div class="flex items-center justify-between">
 				<Label for="new-task-reviewer" class="text-lg">Reviewer:</Label>
 				<Input
-					bind:value={newTaskReviewer}
+					bind:value={newReviewer}
+					on:keyup={fetchReviewerSuggestion}
 					id="new-task-reviewer"
 					class="w-2/3"
 					placeholder="Task Reviewer"
 				/>
+				<Dropdown open={newReviewer !== ''}>
+					{#each reviewerSuggestion as m}
+						<DropdownItem
+							class="w-52"
+							on:click={() => {
+								reviewerId = m.id;
+								newReviewer = m.name;
+							}}>{m.name}</DropdownItem
+						>
+					{/each}
+				</Dropdown>
 			</div>
 			<FormButton onClickFunction={submit} {loading}>Submit</FormButton>
 		</div>
