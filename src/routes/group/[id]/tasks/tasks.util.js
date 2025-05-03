@@ -33,19 +33,17 @@ export function submitNewTask({
 	})();
 }
 
-export function fetchTasks(groupId = '') {
-	(async () => {
-		const res = await fetch(`http://localhost:8000/task/${groupId}`, {
-			method: 'GET',
-			headers: {
-				Accept: '*',
-				'Content-Type': 'application/json',
-				authorization: `${window.localStorage.getItem('authorization')}`
-			}
-		});
-		if (!res.ok) alert('Fetch Tasks Failed!');
-		return await res.json();
-	})();
+export async function fetchTasks(groupId = '') {
+	const res = await fetch(`http://localhost:8000/task/${groupId}`, {
+		method: 'GET',
+		headers: {
+			Accept: '*',
+			'Content-Type': 'application/json',
+			authorization: `${window.localStorage.getItem('authorization')}`
+		}
+	});
+	if (!res.ok) alert('Fetch Tasks Failed!');
+	return await res.json();
 }
 
 export async function fetchMembers(groupId=0, memberNamePattern='') {

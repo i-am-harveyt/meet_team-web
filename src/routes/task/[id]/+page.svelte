@@ -2,7 +2,7 @@
 	import Container from '../../../components/Container.svelte';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { fetchTask, submitCommit, submitDone } from './task.util.js';
+	import { fetchTask, fetchMessages, submitCommit, submitDone } from './task.util.js';
 	import {
 		Button,
 		Hr,
@@ -28,7 +28,7 @@
 	/**
 	 * @type {{ id: number; title: string; description: string | null; reference_link: string | null; username: string; creator_id: number; create_at: string; }[] | null}
 	 */
-	let commits = null;
+	let thread = [];
 	let doneModalOpen = false;
 
 	let isMessage = true;
@@ -38,11 +38,19 @@
 
 	onMount(() => {
 		(async () => {
-			const data = await fetchTask(taskId);
-			setTimeout(() => {
-				commits = data.commits;
-				taskInfo = data.task;
-			}, 500);
+			const fetchedTasks = await fetchTask(taskId);
+			const fetchedMessages = await fetchMessages(parseInt(taskId));
+			const commits = fetchedTasks.commits;
+			taskInfo = fetchedTasks.task;
+			const messages = fetchedMessages;
+
+			thread = commits
+				?.concat(messages)
+				.map((item) => ({
+					...item,
+					isMessage: item.reference_link === undefined ? true : false
+				}))
+				.sort((a, b) => new Date(a.create_at) - new Date(b.create_at)); // from old to new
 		})();
 	});
 </script>
@@ -61,19 +69,22 @@
 				/>
 			{/if}
 			<Hr />
-			{#if commits}
+			{#if thread}
 				<p class="mb-3 text-lg font-bold">Commit History</p>
 				<Timeline class="mx-auto w-11/12 border-l-gray-600 text-gray-400">
-					{#each commits as commit}
-						<CommitBlock {...commit} />
+					{#each thread as item}
+						{#if !item.isMessage}
+							<CommitBlock {...item} />
+						{:else}
+							<TimelineItem
+								date={item.create_at}
+								classTime="text-gray-600 dark:text-gray-400"
+								classDiv="dark:text-gray-50 bg-gray-600 dark:bg-gray-400"
+							>
+								<MessageCard name={item.username}>{item.description}</MessageCard>
+							</TimelineItem>
+						{/if}
 					{/each}
-					<TimelineItem
-						date={'2024-05-18 17:58'}
-						classTime="text-gray-600 dark:text-gray-300"
-						classDiv="dark:text-gray-300 bg-gray-600 dark:bg-gray-400"
-					>
-						<MessageCard name={'John Doe'}>Hi, How are you?</MessageCard>
-					</TimelineItem>
 				</Timeline>
 			{/if}
 		</div>
@@ -85,6 +96,8 @@
 				rounded-xl
 				border
 				border-gray-500
+				text-gray-600
+				dark:text-gray-300
 				bg-gray-300
 				p-3
 				shadow
@@ -100,16 +113,16 @@
 				<form class="flex flex-col gap-2">
 					{#if !isMessage}
 						<div>
-							<Label class="text-lg font-semibold">Title</Label>
+							<Label class="text-lg font-semibold text-gray-600 dark:text-gray-300">Title</Label>
 							<Input bind:value={inputTitle} placeholder="Title" />
 						</div>
 						<div>
-							<Label class="text-lg font-semibold">Reference Link(Optional)</Label>
+							<Label class="text-lg font-semibold text-gray-600 dark:text-gray-300">Reference Link(Optional)</Label>
 							<Input bind:value={inputRefLink} placeholder="Ref Link" />
 						</div>
 					{/if}
 					<div>
-						<Label class="text-lg font-semibold">
+						<Label class="text-lg font-semibold text-gray-600 dark:text-gray-300">
 							{isMessage ? 'Message' : 'Description'}
 						</Label>
 						<Textarea bind:value={inputDesc} placeholder="Leave your content here" />

@@ -1,8 +1,9 @@
 <script>
 	import { Button, Label, Popover } from 'flowbite-svelte';
 	import Container from '../../../../components/Container.svelte';
+	import { blur, slide } from 'svelte/transition';
 
-	const tasks = [];
+	export let tasks = [];
 
 	/**
 	 * @param {Date} start
@@ -14,7 +15,7 @@
 
 	const taskColors = { Done: '#34d399', Doing: '#f87171', Todo: '#fb923c' };
 	const today = new Date();
-	const startDate = new Date(Math.min(...tasks.map((t) => new Date(t.start))));
+	const startDate = new Date(Math.min(...tasks.map((t) => new Date(t.create_at))));
 	const endDate = new Date();
 	const days = Math.ceil((today - startDate) / (1000 * 60 * 60 * 24));
 	let dates = [];
@@ -49,21 +50,21 @@
 			<Button
 				id="task{t.id}"
 				href={`/task/${t.id}`}
-				class="mb-2 h-4/5 rounded-2xl p-1"
+				class="mb-2 h-10 rounded-2xl p-1"
 				style="
 				grid-row-start: {i + 1 + 1};
 				grid-row-end: {i + 2 + 1};
-				grid-column-start: {countTimeSpan(startDate, new Date(t.start)) + 1};
+				grid-column-start: {countTimeSpan(startDate, new Date(t.create_at)) + 1};
         grid-column-end: {1 +
-					(t.end !== null
-						? countTimeSpan(startDate, new Date(t.end))
+					(t.close_at !== null
+						? countTimeSpan(startDate, new Date(t.close_at))
 						: countTimeSpan(startDate, today))};
 				background-color: {taskColors[t.status]}
 				"
 			>
-				{t.name}
+				<span class="text-lg w-full overflow-hidden text-ellipsis text-nowrap">{t.name}</span>
 			</Button>
-			<Popover title={t.name} triggeredBy="#task{t.id}">
+			<Popover title={t.name} triggeredBy="#task{t.id}" transition={blur} params={{duration: 200}}>
 				<p class="max-h-32 w-60 overflow-hidden text-ellipsis">
 					{t.description}
 				</p>

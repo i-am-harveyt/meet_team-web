@@ -19,6 +19,9 @@
 	 */
 	export let status;
 
+	export let create_at=null;
+	export let close_at=null;
+
 	/**
 	 * @type {
 			"red" |
@@ -47,7 +50,7 @@
 	outline
 	color="none"
 	class="
-	mt-3
+	mb-3
 	flex w-11/12
 	flex-col
 	items-start
@@ -60,7 +63,7 @@
 >
 	<div class="flex w-full justify-between">
 		<p class="text-lg">{name}</p>
-		<Badge color={colorStr}>{status}</Badge>
+		<Badge class="py-1 h-fit" color={colorStr}>{status}</Badge>
 	</div>
 	<p class="w-full overflow-hidden overflow-ellipsis text-start">
 		{description === null ? '' : description}
